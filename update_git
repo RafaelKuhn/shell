@@ -1,0 +1,2 @@
+#/bin/sh
+ga . && gc --amend -m "add: setup" && gp -f

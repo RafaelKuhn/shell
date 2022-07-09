@@ -1,0 +1,161 @@
+printf "#########################################################\n";
+printf "######################### SETUP #########################\n";
+printf "#########################################################\n";
+
+confirm() {
+	local ans IFS=;
+	printf "$1";
+	while read -n 1 ans;
+	do case $ans in [Yy]) return 0;;
+		[Nn]) return 1;;
+		esac;
+	done;
+};
+
+_main() {
+	local DOTFILES_URL="https://gist.github.com/RafaelKuhn/22ebe5ddef4dac4e898d28c4eec7b2dc/raw";
+	local GIT_SCRIPTS_URL="https://gist.github.com/RafaelKuhn/d3cfdd2be6312c3db7a273d183f64d2d/raw";
+	local FUNCTIONS_URL="https://gist.github.com/RafaelKuhn/2409a903309eeade5549c5f065b24b60/raw";
+	
+	local PROFILE_PATH="$HOME/.bash_profile";
+	local ALIASES_PATH="$HOME/.bash_aliases";
+	
+	local SCRIPTS_DIR="$HOME/.shell_scripts";
+	local FUNCTIONS_DIR="$HOME/.shell_functions";
+
+
+
+	printf "setting up ~/.bash_profile and ~/.bash_aliases\n\n";
+
+	[ -f "$PROFILE_PATH" ] && {
+		if confirm "$PROFILE_PATH exists, wanna overwrite? (y/n) "; then
+			printf " downloading .bash_profile";
+			curl -L -s "$DOTFILES_URL/.bash_profile" > "$PROFILE_PATH";
+		fi;
+	} || {
+		printf "downloading .bash_profile";
+		curl -L -s "$DOTFILES_URL/.bash_profile" > "$PROFILE_PATH";
+	};
+	printf "\n";
+	
+
+	[ -f "$ALIASES_PATH" ] && {
+		if confirm "$ALIASES_PATH exists, wanna overwrite? (y/n) "; then
+			printf " downloading .bash_aliases";
+			curl -L -s "$DOTFILES_URL/.bash_aliases" > "$ALIASES_PATH";
+		fi;
+	} || {
+		printf "downloading .bash_aliases";
+		curl -L -s "$DOTFILES_URL/.bash_aliases" > "$ALIASES_PATH";
+	};
+	printf "\n";
+
+
+
+	printf "\nsetting up ~/.shell_scripts/\n\n";
+
+	[ -d "$SCRIPTS_DIR" ] || {
+		printf "creating scripts directory: $SCRIPTS_DIR\n";
+		mkdir "$SCRIPTS_DIR";
+	};
+
+
+	[ -f "$SCRIPTS_DIR/gitig" ] && {
+		if confirm "$SCRIPTS_DIR/gitig exists, wanna overwrite? (y/n) "; then
+			printf " downloading script gitig";
+			curl -L -s "$GIT_SCRIPTS_URL/gitig" > "$SCRIPTS_DIR/gitig";
+		fi;
+	} || {
+		printf "downloading script gitig";
+		curl -L -s "$GIT_SCRIPTS_URL/gitig" > "$SCRIPTS_DIR/gitig";
+	};
+	printf "\n";
+
+
+	[ -f "$SCRIPTS_DIR/git-objs" ] && {
+		if confirm "$SCRIPTS_DIR/git-objs exists, wanna overwrite? (y/n) "; then
+			printf " downloading script git-objs";
+			curl -L -s "$GIT_SCRIPTS_URL/git-objs" > "$SCRIPTS_DIR/git-objs";
+		fi;
+	} || {
+		printf "downloading script git-objs";
+		curl -L -s "$GIT_SCRIPTS_URL/git-objs" > "$SCRIPTS_DIR/git-objs";
+	};
+	printf "\n";
+
+
+	[ -f "$SCRIPTS_DIR/git-prune-local" ] && {
+		if confirm "$SCRIPTS_DIR/git-prune-local exists, wanna overwrite? (y/n) "; then
+			printf " downloading script git-prune-local";
+			curl -L -s "$GIT_SCRIPTS_URL/git-prune-local" > "$SCRIPTS_DIR/git-prune-local";
+		fi;
+	} || {
+		printf "downloading script git-prune-local";
+		curl -L -s "$GIT_SCRIPTS_URL/git-prune-local" > "$SCRIPTS_DIR/git-prune-local";
+	};
+	printf "\n";
+
+
+	[ -f "$SCRIPTS_DIR/capitalize" ] && {
+		if confirm "$SCRIPTS_DIR/capitalize exists, wanna overwrite? (y/n) "; then
+			printf " downloading script capitalize";
+			curl -L -s "$GIT_SCRIPTS_URL/capitalize" > "$SCRIPTS_DIR/capitalize";
+		fi;
+	} || {
+		printf "downloading script capitalize";
+		curl -L -s "$GIT_SCRIPTS_URL/capitalize" > "$SCRIPTS_DIR/capitalize";
+	};
+	printf "\n";
+
+
+	[ -f "$SCRIPTS_DIR/pwdw" ] && {
+		if confirm "$SCRIPTS_DIR/pwdw exists, wanna overwrite? (y/n) "; then
+			printf " downloading script pwdw";
+			curl -L -s "$GIT_SCRIPTS_URL/pwdw" > "$SCRIPTS_DIR/pwdw";
+		fi;
+	} || {
+		printf "downloading script pwdw";
+		curl -L -s "$GIT_SCRIPTS_URL/pwdw" > "$SCRIPTS_DIR/pwdw";
+	};
+	printf "\n";
+
+
+
+	printf "\nsetting up ~/.shell_functions/\n\n";
+
+	[ -d "$FUNCTIONS_DIR" ] || {
+		printf "creating functions directory: $FUNCTIONS_DIR\n";
+		mkdir "$FUNCTIONS_DIR";
+	};
+
+
+	[ -f "$FUNCTIONS_DIR/remember.sh" ] && {
+		if confirm "$FUNCTIONS_DIR/remember.sh exists, wanna overwrite? (y/n) "; then
+			printf " downloading script remember.sh";
+			curl -L -s "$FUNCTIONS_URL/remember.sh" > "$FUNCTIONS_DIR/remember.sh";
+		fi;
+	} || {
+		printf "downloading script remember.sh";
+		curl -L -s "$FUNCTIONS_URL/remember.sh" > "$FUNCTIONS_DIR/remember.sh";
+	};
+	printf "\n\n";
+
+
+	printf "granting permissions to functions and scripts\n";
+
+	for script in "$SCRIPTS_DIR"/*; do
+		chmod +x "$script";
+	done;
+
+	for func in "$FUNCTIONS_DIR"/*; do
+		chmod +x "$func";
+	done;
+
+
+	source "$PROFILE_PATH";
+};
+
+_main
+
+# TODO: test this in actual linos distro
+# TODO: download some functions, more scripts like GITIG, PWDW
